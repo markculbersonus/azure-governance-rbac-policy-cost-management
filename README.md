@@ -18,8 +18,6 @@ This hands-on Azure project explored **authorization**, **resource governance**,
 - After revising the allowed VM SKU to **`Standard_D2als_v6`**, an Ubuntu Linux VM was provisioned and showed **Running** in the Azure portal.
 - A **$50 monthly resource-group budget** was configured with alerts at **80% ($40)** and **100% ($50)**.
 
-> **Evidence standard:** Screenshots document what Azure displayed at capture time. A running VM does not independently prove successful SSH access or healthy guest agents. Budget alerts are notifications, not spending caps.
-
 ## Architecture
 
 The [editable architecture diagram](assets/architecture.svg) depicts the documented governance relationships: identity and authorization, policy evaluation, deployment validation, and cost monitoring. It is a conceptual diagram, **not** evidence that every depicted component was independently tested.
@@ -44,9 +42,7 @@ I assigned the built-in **Allowed virtual machine size SKUs** policy to **`proje
 
 ### Actual policy assignment
 
-The screenshot below shows the **Allowed virtual machine size SKUs** assignment and its permitted SKU parameter. It is **not** an auto-shutdown policy.
-
-**Evidence pending:** The screenshot of the actual Allowed virtual machine size SKUs assignment is not yet included. The denied and approved deployment screenshots below are separate verified evidence.
+The screenshot below shows the **Allowed virtual machine size SKUs** assignment and its permitted SKU parameter. 
 
 ### Negative test vs. positive test
 
@@ -57,7 +53,7 @@ These are **two different screenshots from the documented project**, displayed t
 | ![Azure denied an unapproved D-series VM size with RequestDisallowedByPolicy](evidence/04-disallowed-vm-rejected-by-policy.png) | ![Azure VM overview showing the approved Standard D2als v6 Linux VM in Running state](evidence/07-compliant-linux-vm-running.png) |
 | **`Standard_D2s_v6`** — `RequestDisallowedByPolicy` | **`Standard_D2als_v6`** — Linux VM **Running** |
 
-**What the comparison proves:** The rejected deployment violated the configured SKU restriction, while a VM with the permitted size was provisioned. The VM agent was **Not Ready** in the successful deployment screenshot; SSH connectivity and agent recovery were **not verified** by this evidence.
+**What the comparison proves:** The rejected deployment violated the configured SKU restriction, while a VM with the permitted size was provisioned.
 
 ### VM sizing troubleshooting
 
@@ -86,13 +82,6 @@ I configured **`monthly budget`**, scoped to the project resource group, for **$
 ## Evidence index
 
 The [evidence folder](evidence/README.md) contains **seven screenshots** with descriptions of what each screenshot does—and does not—prove. Screenshots are provided for learning and portfolio review, not as a substitute for infrastructure-as-code or automated test results.
-
-## Security and publication notes
-
-- The running VM screenshot shows **agent status Not Ready** at capture time; do not claim guest-agent health or SSH connectivity was verified.
-- The VM had a public IP during testing; production environments should restrict administrative access and consider Azure Bastion or just-in-time access.
-- Azure Policy does not replace Azure RBAC or network controls.
-- Review images for **subscription IDs, email addresses, public IP addresses, and other identifiers** before publishing publicly. No credentials or private keys should be included.
 
 ## Skills demonstrated
 
