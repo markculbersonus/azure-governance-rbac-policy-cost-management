@@ -1,6 +1,47 @@
 # ☁️ Azure Governance, RBAC, Policy Enforcement & Cost Management
 
-![Azure governance architecture](assets/architecture.svg)
+## Architecture overview
+
+The diagram below renders directly in the main README. The [editable SVG architecture](assets/architecture.svg) is also available.
+
+```mermaid
+flowchart TB
+    subgraph ACCESS["IDENTITY & ACCESS"]
+        ID["Microsoft Entra ID<br/>Junior Developer"]
+        RBAC["Azure RBAC<br/>Reader at resource-group scope"]
+        ACCESS_DENIED["Storage deployment validation<br/>AuthorizationFailed"]
+        ID --> RBAC
+        RBAC -->|"Write action denied"| ACCESS_DENIED
+    end
+
+    subgraph AZURE["AZURE SUBSCRIPTION · GOVERNANCE SCOPE"]
+        RG["Project resource group"]
+        POLICY["Azure Policy<br/>Allowed virtual machine size SKUs"]
+        DENIED["Unapproved Standard_D2s_v6<br/>RequestDisallowedByPolicy"]
+        ALLOWED["Approved Standard_D2als_v6<br/>Linux VM provisioned · Running"]
+        BUDGET["Azure Cost Management<br/>$50 monthly budget"]
+        ALERTS["Actual spend alerts<br/>80% ($40) · 100% ($50)"]
+        RG --> POLICY
+        POLICY -->|"Deny"| DENIED
+        POLICY -->|"Permit"| ALLOWED
+        RG --> BUDGET
+        BUDGET --> ALERTS
+    end
+
+    RBAC -->|"View resources"| RG
+
+    classDef identity fill:#172e59,stroke:#508cf0,color:#ffffff,stroke-width:2px;
+    classDef control fill:#123d54,stroke:#25b7d4,color:#ffffff,stroke-width:2px;
+    classDef denied fill:#57252a,stroke:#e67e83,color:#ffffff,stroke-width:2px;
+    classDef allowed fill:#154d40,stroke:#4adaab,color:#ffffff,stroke-width:2px;
+    classDef cost fill:#382f62,stroke:#a995ef,color:#ffffff,stroke-width:2px;
+
+    class ID,RBAC,RG identity;
+    class POLICY control;
+    class ACCESS_DENIED,DENIED denied;
+    class ALLOWED allowed;
+    class BUDGET,ALERTS cost;
+```
 
 > **Azure Portfolio Project | Identity & Access Management • Azure Policy • Cloud Governance • FinOps**
 
